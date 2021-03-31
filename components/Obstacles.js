@@ -1,10 +1,8 @@
 import React from 'react';
 import {View} from 'react-native';
 
-const Obstacles = () => {
-    const obstacleWidth = 60;
-    const obstacleHeight = 300;
-    const gap = 50;
+const Obstacles = ({obstaclesLeft, obstacleWidth, obstacleHeight, gap, randomBottom}) => {
+
 
     return (
         <>
@@ -14,7 +12,7 @@ const Obstacles = () => {
                 width: obstacleWidth,
                 height: obstacleHeight,
                 left: obstaclesLeft,
-                bottom: 0 + obstacleHeight + gap,
+                bottom: randomBottom + obstacleHeight + gap,
             }} />
 
             <View style={{
@@ -23,7 +21,7 @@ const Obstacles = () => {
                 width: obstacleWidth,
                 height: obstacleHeight,
                 left: obstaclesLeft,
-                bottom: 0,
+                bottom: randomBottom,
             }} />
         </>)
 }
