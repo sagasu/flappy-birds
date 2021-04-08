@@ -1,1 +1,3 @@
-# flappy-birds
+# flappy-birds  
+`npm run start` 
+ 
