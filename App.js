@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import {Text, Dimensions, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import {Text, Dimensions, StyleSheet,ImageBackground, TouchableWithoutFeedback, View } from 'react-native';
 import Bird from './components/Bird';
 import Obstacles from './components/Obstacles';
 
@@ -8,7 +8,7 @@ export default function App() {
   const screenWidth = Dimensions.get("screen").width;
   const screenHeight = Dimensions.get("screen").height;
   const birdLeft = screenWidth / 2;
-  const [birdBottom, setBirdBottom] = useState(screenHeight / 2);
+
   const gravity = 3;
   let gameTimerId;
   let obstacleLeftTimerId;
@@ -19,6 +19,7 @@ export default function App() {
   const gap = 200;
   const birdWidth = 60;
 
+  const [birdBottom, setBirdBottom] = useState(screenHeight / 2);
   const [obstaclesLeft, setObstaclesLeft] = useState(screenWidth);
   const [secondObstaclesLeft, setSecondObstaclesLeft] = useState(screenWidth + screenWidth/2);
   const [obstacleNegHeight, setObstacleNegHeight] = useState(0);
@@ -78,7 +79,19 @@ export default function App() {
   const jump = () => {
     if(!isGameOver && (birdBottom < screenHeight)){
       setBirdBottom(birdBottom => birdBottom + 50);
+    }else{
+      restartGame();
     }
+  };
+
+  const restartGame = () => {
+    setBirdBottom(screenHeight / 2);
+    setObstaclesLeft(screenWidth);
+    setSecondObstaclesLeft(screenWidth + screenWidth/2);
+    setObstacleNegHeight(0);
+    setSecondObstacleNegHeight(0);
+    setScore(0);
+    setIsGameOver(false);
   };
 
   // Try to fix it to reduce repetition
@@ -126,14 +139,14 @@ export default function App() {
   };
 
   useEffect(() => {
-    if(isCollision(obstacleNegHeight, obstaclesLeft) || isCollision(secondObstacleNegHeight, obstaclesLeft)){
+    if(isCollision(obstacleNegHeight, obstaclesLeft) || isCollision(secondObstacleNegHeight, secondObstaclesLeft)){
       gameOver();
     }
   });
 
   return (
     <TouchableWithoutFeedback onPress={jump}>
-      <View style={styles.container}>
+      <ImageBackground source={require('./assets/fb-game-background.png')} style={styles.image}>
         {isGameOver && <Text>{score}</Text>}
         <Bird 
           birdBottom = {birdBottom}
@@ -153,11 +166,8 @@ export default function App() {
           gap={gap}
           randomBottom={secondObstacleNegHeight}
         />
-
-      </View>
-    </TouchableWithoutFeedback>
-
-    
+      </ImageBackground>
+    </TouchableWithoutFeedback>  
   );
 }
 
@@ -168,4 +178,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  image:{
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
